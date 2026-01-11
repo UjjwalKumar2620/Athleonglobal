@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth, UserRole } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import AadhaarVerification from '@/components/AadhaarVerification';
-import athleonLogo from '@/assets/athleon-logo.jpeg';
+import athleonLogo from '@/assets/athleon-logo.png';
 
 const roles: { value: UserRole; label: string; icon: React.ElementType; description: string }[] = [
   { value: 'athlete', label: 'Athlete', icon: Trophy, description: 'Track performance & connect with scouts' },

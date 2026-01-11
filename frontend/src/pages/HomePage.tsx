@@ -5,7 +5,7 @@ import { ArrowRight, Play, Trophy, Users, Zap, Video, MapPin, BarChart3, UserSea
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import athleonVideo from '@/assets/athleon-logo-video.mp4';
-import athleonLogo from '@/assets/athleon-logo.jpeg';
+import athleonLogo from '@/assets/athleon-logo.png';
 
 // Primary color: #1CA6E6
 const primaryColor = 'hsl(198,82%,51%)';
