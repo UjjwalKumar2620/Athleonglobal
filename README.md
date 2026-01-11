@@ -1,117 +1,147 @@
 # Athleon Global - Sports Networking Platform
 
-A full-stack sports networking platform built with React, TypeScript, Express, and PostgreSQL.
+A comprehensive sports networking platform connecting athletes, coaches, event organizers, and sports enthusiasts.
 
-## 🚀 Quick Start - Localhost Development
+## 🚀 Quick Start
 
-**For detailed setup instructions, see [LOCALHOST_SETUP.md](./LOCALHOST_SETUP.md)**
-
-### Quick Setup:
-
+### Development
 ```bash
-# 1. Install dependencies
+# Install dependencies for both frontend and backend
 npm install
-cd server && npm install && cd ..
 
-# 2. Set up database (PostgreSQL required)
-# Create a .env file in server/ directory with DATABASE_URL
+# Run frontend (http://localhost:5173)
+cd frontend && npm run dev
 
-# 3. Initialize database
-cd server
-npx prisma generate
-npx prisma db push
-npm run seed  # Optional: seed sample data
-cd ..
-
-# 4. Install concurrently (for running both servers)
-npm install --save-dev concurrently
-
-# 5. Start both servers
-npm run dev:full
+# Run backend (http://localhost:3001)
+cd backend && npm run dev
 ```
 
-- **Frontend**: http://localhost:8080
-- **Backend API**: http://localhost:3001
+### Production
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for production deployment instructions.
 
-### Demo Accounts (after seeding):
-- Athlete: `athlete@athleon.com` / `password123`
-- Organizer: `organizer@athleon.com` / `password123`
-- Coach: `coach@athleon.com` / `password123`
-- Viewer: `viewer@athleon.com` / `password123`
+## ✨ Features
 
----
+### For Athletes
+- 🎥 AI-powered video performance analysis
+- 💬 AI sports coach chatbot
+- 📊 Performance tracking and analytics
+- 🏆 Portfolio showcase
+- 🎯 Event participation
 
-# Welcome to your Lovable project
+### For Coaches/Scouts
+- 👀 Discover talent
+- 📈 Track athlete progress
+- 🤝 Connect with athletes
+- 📝 Provide feedback
 
-## Project info
+### For Organizers
+- 📅 Create and manage events
+- 💳 Collect payments (Stripe)
+- 📍 Location-based events (Google Maps)
+- 📊 Event analytics
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+### For Fans/Viewers
+- 🎬 Watch athlete content
+- ⭐ Follow favorite athletes
+- 🎟️ Buy event tickets
+- 📰 Stay updated with sports news
 
-## How can I edit this code?
+## 🛠️ Tech Stack
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
+### Frontend
+- React + TypeScript
 - Vite
+- TailwindCSS + shadcn/ui
+- React Router
+
+### Backend
+- Node.js + Express
 - TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- Prisma ORM
+- PostgreSQL (optional for production)
 
-## How can I deploy this project?
+### AI/ML
+- OpenRouter API (Gemini 2.0 Flash)
+- Video analysis with ffmpeg
+- Multimodal AI processing
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Payments
+- Stripe integration
 
-## Can I connect a custom domain to my Lovable project?
+## 📁 Project Structure
 
-Yes, you can!
+```
+athlete-hub-global/
+├── frontend/          # React frontend
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── contexts/
+│   │   └── lib/
+│   └── public/
+├── backend/           # Express backend API
+│   ├── src/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── config/
+│   └── vercel.json
+└── DEPLOYMENT.md      # Production deployment guide
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔑 Environment Setup
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
-# athleonglobal
+### Backend
+Create `backend/.env`:
+```bash
+OPENROUTER_API_KEY=your_key_here    # Required for AI features
+JWT_SECRET=your_secret
+PORT=3001
+```
+
+See `backend/.env.example` for all options.
+
+### Frontend
+Development uses `frontend/.env.development`
+Production uses `frontend/.env.production`
+
+## 🌐 Live Demo
+
+- Frontend: Deployed on GitHub Pages
+- Backend: Deployed on Vercel
+- See [DEPLOYMENT.md](./DEPLOYMENT.md) for setup
+
+## 📖 Documentation
+
+- [Deployment Guide](./DEPLOYMENT.md)
+- [Backend Setup](./backend/README.md)
+- [AI Features Documentation](./backend/src/services/ai.ts)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is private. All rights reserved.
+
+## 🆘 Support
+
+For issues or questions:
+1. Check [DEPLOYMENT.md](./DEPLOYMENT.md) troubleshooting section
+2. Review backend logs in Vercel dashboard
+3. Check browser console for frontend errors
+
+## 🎯 Roadmap
+
+- [x] User authentication
+- [x] AI video analysis
+- [x] AI chatbot
+- [x] Event management
+- [x] Payment integration
+- [ ] Mobile app
+- [ ] Advanced analytics
+- [ ] Team features
