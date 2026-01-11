@@ -23,8 +23,11 @@ app.use(cors({
         ? ['http://localhost:5173', 'http://localhost:8080', env.FRONTEND_URL]
         : [
             env.FRONTEND_URL,
+            'https://athleonglobal.in',
+            'https://www.athleonglobal.in',
             'https://ujjwalkumar2620.github.io',
-            /\.github\.io$/  // Allow all GitHub Pages subdomains
+            /\.github\.io$/,  // Allow all GitHub Pages subdomains
+            /\.athleonglobal\.in$/  // Allow all athleonglobal.in subdomains
         ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
