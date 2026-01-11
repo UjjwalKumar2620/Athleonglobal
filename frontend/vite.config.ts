@@ -22,6 +22,6 @@ export default defineConfig({
     },
   },
   // Use './' for relative paths, which fixes the white screen issue on GitHub Pages
-  base: '/AthleonGlobal/',
+  base: './',
 
 })
