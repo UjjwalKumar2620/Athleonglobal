@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Athleon Global - Sports Networking Platform</title>
+  <meta name="description" content="Connect, compete, and conquer with AI-powered sports networking" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <meta name="author" content="Athleon Global" />
+
+  <meta property="og:title" content="Athleon Global - Sports Networking Platform" />
+  <meta property="og:description"
+    content="The ultimate platform for athletes, coaches, and sports enthusiasts. Connect, compete, and conquer." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/favicon.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@AthleonGlobal" />
+  <meta name="twitter:image" content="/favicon.png" />
+
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,ta,te,mr,kn',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript"
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <style>
+    /* Google Translate Styling */
+    .goog-te-banner-frame {
+      display: none !important;
+    }
+
+    body {
+      top: 0 !important;
+    }
+
+    .goog-te-gadget {
+      font-family: inherit !important;
+      font-size: 0 !important;
+    }
+
+    .goog-te-gadget-simple {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 8px !important;
+      padding: 6px 12px !important;
+      cursor: pointer !important;
+    }
+
+    .goog-te-gadget-simple:hover {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .goog-te-gadget-simple .goog-te-menu-value {
+      padding: 0 !important;
+      font-size: 14px !important;
+    }
+
+    .goog-te-gadget-simple .goog-te-menu-value span {
+      color: white !important;
+      font-size: 14px !important;
+    }
+
+    .goog-te-gadget-simple .goog-te-menu-value span:first-child {
+      display: inline !important;
+    }
+
+    .goog-te-gadget img {
+      display: none !important;
+    }
+
+    .goog-te-menu-frame {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    #google_translate_element {
+      display: inline-flex !important;
+      align-items: center !important;
+    }
+
+    .skiptranslate {
+      display: none !important;
+    }
+
+    body {
+      top: 0 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- Handle SPA routing for GitHub Pages -->
+  <script>
+    (function () {
+      var redirectPath = sessionStorage.getItem('redirectPath');
+      if (redirectPath) {
+        sessionStorage.removeItem('redirectPath');
+        history.replaceState(null, null, redirectPath);
+      }
+    })();
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

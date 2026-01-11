@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Athleon Global - Light Theme for internal pages */
+    --background: 0 0% 100%;
+    --foreground: 220 20% 10%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 220 20% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 10%;
+
+    /* Updated primary color: #1CA6E6 = hsl(198, 82%, 51%) */
+    --primary: 198 82% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 95%;
+    --secondary-foreground: 220 20% 10%;
+
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 10% 40%;
+
+    --accent: 198 82% 51%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 15% 85%;
+    --input: 220 15% 92%;
+    --ring: 198 82% 51%;
+
+    --radius: 0.75rem;
+
+    /* Custom Athleon Colors - Updated blue #1CA6E6 */
+    --athleon-black: 220 20% 4%;
+    --athleon-dark: 220 18% 8%;
+    --athleon-grey: 220 15% 15%;
+    --athleon-light-grey: 220 10% 55%;
+    --athleon-blue: 198 82% 51%;
+    --athleon-blue-glow: 198 82% 60%;
+    --athleon-white: 0 0% 100%;
+    --athleon-steel: 215 20% 65%;
+    --athleon-electric: 198 82% 51%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(198 82% 51%), hsl(205 80% 45%));
+    --gradient-glass: linear-gradient(135deg, hsla(220, 15%, 98%, 0.9), hsla(220, 15%, 95%, 0.8));
+    --gradient-shine: linear-gradient(90deg, transparent, hsla(0, 0%, 100%, 0.3), transparent);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 15% 98%));
+    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsla(198, 82%, 51%, 0.15) 0%, transparent 60%);
+
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsla(198, 82%, 51%, 0.2);
+    --shadow-card: 0 8px 32px hsla(0, 0%, 0%, 0.1);
+    --shadow-elevated: 0 20px 60px hsla(0, 0%, 0%, 0.15);
+
+    /* Glass Effect */
+    --glass-bg: hsla(0, 0%, 100%, 0.8);
+    --glass-border: hsla(220, 15%, 80%, 0.5);
+    --glass-blur: 20px;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 20% 10%;
+    --sidebar-primary: 198 82% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 95%;
+    --sidebar-accent-foreground: 220 20% 10%;
+    --sidebar-border: 220 15% 85%;
+    --sidebar-ring: 198 82% 51%;
+  }
+
+  /* Dark theme for hero section */
+  .dark-hero {
+    --background: 220 20% 4%;
+    --foreground: 0 0% 98%;
+    --card: 220 18% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 18% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 200 100% 50%;
+    --primary-foreground: 220 20% 4%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 220 15% 12%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 200 80% 50%;
+    --accent-foreground: 0 0% 98%;
+    --border: 220 15% 18%;
+    --input: 220 15% 15%;
+    --ring: 200 100% 50%;
+    --glass-bg: hsla(220, 18%, 12%, 0.6);
+    --glass-border: hsla(220, 15%, 25%, 0.5);
+  }
+
+  .dark {
+    --background: 220 20% 4%;
+    --foreground: 0 0% 98%;
+    --card: 220 18% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 18% 8%;
+    --popover-foreground: 0 0% 98%;
+    /* Keep blue consistent with light theme */
+    --primary: 198 82% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 220 15% 12%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 198 82% 51%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 15% 18%;
+    --input: 220 15% 15%;
+    --ring: 198 82% 51%;
+
+    /* Dark mode specific variables */
+    --glass-bg: hsla(220, 18%, 12%, 0.8);
+    --glass-border: hsla(220, 15%, 25%, 0.5);
+    --gradient-card: linear-gradient(180deg, hsl(220 18% 10%), hsl(220 18% 6%));
+    --shadow-card: 0 8px 32px hsla(0, 0%, 0%, 0.3);
+
+    --sidebar-background: 220 18% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 198 82% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 198 82% 51%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+  }
+
+  .glass-card-strong {
+    background: hsla(220, 18%, 12%, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsla(220, 15%, 30%, 0.5);
+    border-radius: var(--radius);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(0 0% 100%), hsl(210 100% 70%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: var(--radius);
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--gradient-primary);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+    background-size: 200% 100%;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, hsla(210, 100%, 60%, 0.2) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px hsla(210, 100%, 60%, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px hsla(210, 100%, 60%, 0.5);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Global Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--athleon-dark));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--athleon-grey));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--athleon-light-grey));
+}
+
+/* Specific Utility Classes for Scrollbars */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: hsla(var(--primary), 0.3);
+  border-radius: 9999px;
+}
+
+.scrollbar-thin:hover::-webkit-scrollbar-thumb {
+  background-color: hsla(var(--primary), 0.5);
+}
+
+/* Video container styling */
+.video-glass-container {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.video-glass-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, hsla(220, 18%, 15%, 0.3), hsla(220, 18%, 8%, 0.6));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.video-glass-container video {
+  position: relative;
+  z-index: 0;
+}

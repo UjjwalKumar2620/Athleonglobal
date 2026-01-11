@@ -1,0 +1,306 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Roles
+enum UserRole {
+  athlete
+  coach
+  organizer
+  viewer
+}
+
+// Subscription Status
+enum SubscriptionStatus {
+  active
+  cancelled
+  past_due
+  trialing
+}
+
+// Payment Type
+enum PaymentType {
+  subscription
+  credits
+  ticket
+}
+
+// Event Status
+enum EventStatus {
+  upcoming
+  ongoing
+  completed
+  cancelled
+}
+
+// Registration Type
+enum RegistrationType {
+  player
+  viewer
+}
+
+// User Model
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String
+  name            String
+  role            UserRole
+  phone           String?
+  aadhaarVerified Boolean   @default(false)
+  avatar          String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  athleteProfile     AthleteProfile?
+  subscription       Subscription?
+  aiCreditsWallet    AICreditsWallet?
+  aiUsageLogs        AIUsageLog[]
+  payments           Payment[]
+  eventRegistrations EventRegistration[]
+  eventRatings       EventRating[]
+  organizedEvents    Event[]             @relation("EventOrganizer")
+
+  @@index([email])
+  @@index([role])
+}
+
+// Athlete Profile (extends User for athlete role)
+model AthleteProfile {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  sports       String[] // Array of sports
+  position     String?
+  location     String?
+  bio          String?
+  experience   String?
+  achievements String[]
+  certificates String[] // URLs to certificate files
+  videos       String[] // URLs to video files
+  rating       Float    @default(0)
+  ratingCount  Int      @default(0)
+  followers    Int      @default(0)
+  following    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  performanceData PerformanceData[]
+
+  @@index([userId])
+}
+
+// Performance Data (AI analysis results stored)
+model PerformanceData {
+  id               String   @id @default(uuid())
+  athleteProfileId String
+  overallScore     Float
+  speedScore       Float
+  techniqueScore   Float
+  enduranceScore   Float
+  accuracyScore    Float
+  powerScore       Float
+  agilityScore     Float
+  recordedAt       DateTime @default(now())
+
+  // Relations
+  athleteProfile AthleteProfile @relation(fields: [athleteProfileId], references: [id], onDelete: Cascade)
+
+  @@index([athleteProfileId])
+  @@index([recordedAt])
+}
+
+// Subscription Plans
+model Plan {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  price       Int      // Price in paise (INR cents)
+  period      String   @default("month")
+  roleAccess  UserRole // Which role this plan is for
+  features    String[]
+  stripePriceId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  subscriptions Subscription[]
+
+  @@index([slug])
+}
+
+// User Subscriptions
+model Subscription {
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  planId             String
+  stripeCustomerId   String?
+  stripeSubscriptionId String?
+  status             SubscriptionStatus @default(active)
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  cancelAtPeriodEnd  Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan Plan @relation(fields: [planId], references: [id])
+
+  @@index([userId])
+  @@index([stripeSubscriptionId])
+}
+
+// AI Credits Wallet
+model AICreditsWallet {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  balance   Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// AI Usage Logs
+model AIUsageLog {
+  id          String   @id @default(uuid())
+  userId      String
+  videoUrl    String?
+  videoTitle  String?
+  score       Float?
+  insights    String[]
+  skillBreakdown Json?  // Stores radar chart data
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// Payment Records
+model Payment {
+  id                 String      @id @default(uuid())
+  userId             String
+  stripePaymentId    String?     @unique
+  stripeSessionId    String?     @unique
+  amount             Int         // Amount in paise
+  currency           String      @default("inr")
+  type               PaymentType
+  description        String?
+  status             String      @default("pending")
+  platformFee        Int?        // For event tickets
+  organizerEarnings  Int?        // For event tickets
+  metadata           Json?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([stripePaymentId])
+  @@index([stripeSessionId])
+}
+
+// Venue Model (Delhi Stadiums)
+model Venue {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  latitude  Float
+  longitude Float
+  capacity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  events Event[]
+
+  @@index([name])
+}
+
+// Event Model
+model Event {
+  id             String      @id @default(uuid())
+  title          String
+  sport          String
+  description    String?
+  venueId        String
+  date           DateTime
+  time           String
+  isPaid         Boolean     @default(false)
+  price          Int         @default(0) // Price in paise
+  maxCapacity    Int
+  spotsAvailable Int
+  image          String?
+  category       String      @default("tournament")
+  status         EventStatus @default(upcoming)
+  organizerId    String
+  rating         Float       @default(0)
+  ratingCount    Int         @default(0)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  // Relations
+  venue         Venue               @relation(fields: [venueId], references: [id])
+  organizer     User                @relation("EventOrganizer", fields: [organizerId], references: [id])
+  registrations EventRegistration[]
+  ratings       EventRating[]
+
+  @@index([sport])
+  @@index([date])
+  @@index([organizerId])
+  @@index([status])
+}
+
+// Event Registration
+model EventRegistration {
+  id        String           @id @default(uuid())
+  userId    String
+  eventId   String
+  type      RegistrationType
+  ticketId  String?          @unique
+  paymentId String?
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([eventId])
+  @@index([userId])
+}
+
+// Event Rating
+model EventRating {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  rating    Int      // 1-5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([eventId])
+}
