@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { chatWithOpenRouter } from '@/lib/openrouter';
+import { chatWithAI } from '@/lib/ai-service';
 import { Progress } from '@/components/ui/progress';
 import {
   RadarChart,
@@ -356,7 +356,7 @@ const AIAnalysisPage: React.FC = () => {
       );
 
       // Call Gemini directly
-      const response = await chatWithOpenRouter(messageToSend, conversationHistory);
+      const response = await chatWithAI(messageToSend, conversationHistory);
 
       const assistantMessage: ChatMessage = {
         id: chatMessages.length + 2,

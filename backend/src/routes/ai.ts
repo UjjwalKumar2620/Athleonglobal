@@ -285,14 +285,14 @@ router.post('/chat', authenticate, async (req: Request, res: Response) => {
         });
 
         res.json({
-            message: response,
+            reply: response,  // Changed from 'message' to 'reply'
             timestamp: new Date().toISOString(),
         });
     } catch (error) {
         console.error('AI chat error:', error);
         const errorMessage = error instanceof Error ? error.message : 'Failed to generate response';
         res.status(500).json({
-            error: 'Failed to generate response',
+            error: 'AI service temporarily unavailable',
             message: errorMessage,
             details: env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined
         });

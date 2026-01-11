@@ -45,6 +45,22 @@ app.use(express.urlencoded({ extended: true }));
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
 
+// Root endpoint - returns JSON (not HTML)
+app.get('/', (_req: Request, res: Response) => {
+    res.json({
+        status: 'ok',
+        service: 'Athleon Global Backend API',
+        version: '1.0.0',
+        endpoints: {
+            health: '/api/health',
+            auth: '/api/auth/*',
+            ai: '/api/ai/*',
+            events: '/api/events/*',
+            payments: '/api/payments/*'
+        }
+    });
+});
+
 // Health check
 app.get('/api/health', (_req: Request, res: Response) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });

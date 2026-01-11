@@ -1,8 +1,11 @@
-// OpenRouter AI Service (Refactored to use Backend Proxy)
+// AI Service - Backend Proxy Only
+// IMPORTANT: This file makes NO direct calls to OpenRouter
+// All AI requests go through our backend API at /api/ai/*
+// The backend handles OpenRouter authentication and requests server-side
 import { apiClient } from './api';
 
 interface OpenRouterResponse {
-    message?: string;
+    reply?: string;  // Changed from 'message' to 'reply'
     error?: string;
 }
 
@@ -16,7 +19,13 @@ interface AnalysisResponse {
 
 const getAuthToken = () => localStorage.getItem('athleon_token');
 
-export async function chatWithOpenRouter(userMessage: string, conversationHistory: string[] = []): Promise<string> {
+/**
+ * Chat with AI Coach through backend proxy
+ * @param userMessage - User's message
+ * @param conversationHistory - Not used currently, backend manages context
+ * @returns AI response string
+ */
+export async function chatWithAI(userMessage: string, conversationHistory: string[] = []): Promise<string> {
     const token = getAuthToken();
 
     // Context is handled by backend now, or we can pass basic context.
@@ -28,7 +37,7 @@ export async function chatWithOpenRouter(userMessage: string, conversationHistor
 
     if (!token) {
         console.warn('No auth token found for AI chat');
-        return "I can't connect to my brain right now. Please log in again.";
+        return "Please log in to use the AI coach.";
     }
 
     try {
@@ -40,14 +49,21 @@ export async function chatWithOpenRouter(userMessage: string, conversationHistor
         }
 
         const data = await response.json();
-        return data.message || "I'm having trouble thinking right now.";
+        return data.reply || "I'm having trouble thinking right now. Please try again.";
     } catch (error) {
         console.error('AI Chat Error:', error);
-        return "I'm currently offline or having trouble connecting to the server. Please try again later.";
+        return "I'm currently unavailable. Please try again in a moment.";
     }
 }
 
-export async function analyzeVideoWithOpenRouter(sport: string, videoDescription: string): Promise<AnalysisResponse> {
+
+/**
+ * Analyze performance from text description through backend proxy
+ * @param sport - Sport type
+ * @param videoDescription - Description of performance
+ * @returns Analysis response
+ */
+export async function analyzeWithAI(sport: string, videoDescription: string): Promise<AnalysisResponse> {
     const token = getAuthToken();
 
     if (!token) {
@@ -71,12 +87,11 @@ export async function analyzeVideoWithOpenRouter(sport: string, videoDescription
 
     } catch (error) {
         console.error('AI Analysis Error:', error);
-        // Fallback for demo if server fails?
+        // Fallback response on error
         return {
             score: 75,
             insights: [
-                'Could not connect to analysis server',
-                'Showing estimated metrics based on your request',
+                'Could not connect to AI analysis service',
                 'Please check your internet connection and try again'
             ],
             skillBreakdown: [
