@@ -491,3 +491,83 @@ function generateSimpleResponse(
 
     return `Thanks for your message, ${firstName}! I'm here to help with your athletic performance. You can ask me about:\n\n- Your performance scores and trends\n- Improvement suggestions\n- Training drills and exercises\n- Analyzing your uploaded videos\n\nWhat would you like to know?`;
 }
+
+/**
+ * Analyze performance based on text description
+ */
+export async function analyzePerformanceText(
+    sport: string,
+    description: string
+): Promise<AIAnalysisResult> {
+    if (!env.OPENROUTER_API_KEY) {
+        return generateMockAnalysis();
+    }
+
+    const prompt = `As an AI Sports Coach, analyze this ${sport} performance based on the description:
+
+"${description}"
+
+Provide a JSON response with:
+1. An overall performance score (0-100)
+2. 4-5 key insights about the performance
+3. A skill breakdown for: Technique, Power, Speed, Accuracy, Consistency
+
+Respond ONLY with valid JSON in this exact format:
+{
+  "score": 85,
+  "insights": ["insight1", "insight2", "insight3", "insight4"],
+  "skillBreakdown": [
+    {"skill": "Technique", "value": 80, "fullMark": 100},
+    {"skill": "Power", "value": 75, "fullMark": 100},
+    {"skill": "Speed", "value": 85, "fullMark": 100},
+    {"skill": "Accuracy", "value": 70, "fullMark": 100},
+    {"skill": "Consistency", "value": 78, "fullMark": 100}
+  ],
+  "improvement": 0,
+  "isRelated": true
+}`;
+
+    try {
+        const response = await fetch(OPENROUTER_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${env.OPENROUTER_API_KEY}`,
+                'HTTP-Referer': env.FRONTEND_URL || 'http://localhost:5173',
+                'X-Title': 'Athleon Global Backend',
+            },
+            body: JSON.stringify({
+                model: MODEL_ID,
+                messages: [
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.3,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json() as OpenRouterResponse;
+        const text = data.choices?.[0]?.message?.content || '';
+
+        // Extract JSON
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            return {
+                score: parsed.score || 75,
+                insights: parsed.insights || [],
+                skillBreakdown: parsed.skillBreakdown || generateDefaultSkillBreakdown(),
+                improvement: 0,
+                isRelated: true
+            };
+        }
+
+        throw new Error('Could not parse AI response');
+    } catch (error) {
+        console.error('Text analysis error:', error);
+        return generateMockAnalysis();
+    }
+}

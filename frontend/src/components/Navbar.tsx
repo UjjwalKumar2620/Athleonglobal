@@ -6,7 +6,7 @@ import { Menu, X, Globe, User, LogOut, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import athleonLogo from '@/assets/athleon-logo.jpeg';
+import athleonLogo from '@/assets/athleon-logo.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const languages = [

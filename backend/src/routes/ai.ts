@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { authenticate } from '../middleware/auth.js';
 import { athleteOnly } from '../middleware/roleGuard.js';
-import { analyzeVideo, generateChatResponse } from '../services/ai.js';
+import { analyzeVideo, generateChatResponse, analyzePerformanceText } from '../services/ai.js';
 import { env } from '../config/env.js';
 
 const router = Router();
@@ -336,6 +336,31 @@ router.get('/credits', authenticate, async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Get credits error:', error);
         res.status(500).json({ error: 'Failed to get credits' });
+    }
+});
+
+/**
+ * POST /ai/analyze-text
+ * Analyze performance from text description (Authenticated)
+ */
+router.post('/analyze-text', authenticate, async (req: Request, res: Response) => {
+    try {
+        const { sport, description } = req.body;
+
+        if (!sport || !description) {
+            res.status(400).json({ error: 'Sport and description are required' });
+            return;
+        }
+
+        const analysis = await analyzePerformanceText(sport, description);
+
+        // Optionally save to usage log if desired, but frontend didn't seem to imply saving it permanently?
+        // Let's just return it for now to match frontend behavior.
+
+        res.json(analysis);
+    } catch (error) {
+        console.error('Text analysis route error:', error);
+        res.status(500).json({ error: 'Failed to analyze performance' });
     }
 });
 
