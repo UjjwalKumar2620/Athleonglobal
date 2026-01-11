@@ -87,10 +87,12 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     });
 });
 
-// Start server
-app.listen(env.PORT, () => {
-    console.log(`🚀 Athleon Backend running on http://localhost:${env.PORT}`);
-    console.log(`📊 Environment: ${env.NODE_ENV}`);
-});
+// Start server (only in development, not in Vercel serverless)
+if (process.env.VERCEL !== '1') {
+    app.listen(env.PORT, () => {
+        console.log(`🚀 Athleon Backend running on http://localhost:${env.PORT}`);
+        console.log(`📊 Environment: ${env.NODE_ENV}`);
+    });
+}
 
 export default app;
