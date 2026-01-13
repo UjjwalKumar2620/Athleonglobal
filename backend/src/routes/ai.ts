@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { authenticate } from '../middleware/auth.js';
 import { athleteOnly } from '../middleware/roleGuard.js';
-import { analyzeVideo, generateChatResponse, analyzePerformanceText } from '../services/ai.js';
+import { analyzeVideo, analyzePerformanceText } from '../services/ai.js';
 import { env } from '../config/env.js';
 
 const router = Router();
@@ -251,7 +251,8 @@ router.get('/results', authenticate, athleteOnly, async (req: Request, res: Resp
 
 /**
  * POST /ai/chat
- * AI Coach chatbot (All authenticated users)
+ * AI Coach chatbot - MOCK VERSION (Demo)
+ * Returns sample responses without calling external AI APIs
  */
 router.post('/chat', authenticate, async (req: Request, res: Response) => {
     try {
@@ -262,42 +263,81 @@ router.post('/chat', authenticate, async (req: Request, res: Response) => {
             return;
         }
 
-        // Get user's recent analysis for context (if athlete)
-        let recentAnalysis = null;
-        if (req.user!.role === 'athlete') {
-            try {
-                recentAnalysis = await prisma.aIUsageLog.findFirst({
-                    where: { userId: req.user!.id },
-                    orderBy: { createdAt: 'desc' },
-                });
-            } catch (dbError) {
-                console.error('Error fetching recent analysis:', dbError);
-                // Continue without recent analysis
-            }
-        }
-
-        const response = await generateChatResponse(message, {
-            userName: req.user!.name,
-            recentScore: recentAnalysis?.score || undefined,
-            skills: (recentAnalysis?.skillBreakdown as any[]) || undefined,
-            videoTitle: recentAnalysis?.videoTitle || undefined,
-            insights: (recentAnalysis?.insights as string[]) || undefined,
-        });
+        // Generate mock AI response based on message content
+        const response = generateMockAIResponse(message);
 
         res.json({
-            reply: response,  // Changed from 'message' to 'reply'
+            reply: response,
             timestamp: new Date().toISOString(),
         });
     } catch (error) {
         console.error('AI chat error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Failed to generate response';
         res.status(500).json({
             error: 'AI service temporarily unavailable',
-            message: errorMessage,
-            details: env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined
+            message: 'Please try again later'
         });
     }
 });
+
+/**
+ * Generate mock AI coaching responses based on user message
+ */
+function generateMockAIResponse(message: string): string {
+    const lowerMsg = message.toLowerCase();
+
+    // Greetings
+    if (lowerMsg.match(/^(hi|hello|hey|greetings)/i)) {
+        return "Hello! I'm your AI Sports Coach. I can help you with training tips, technique advice, and performance improvement for various sports. What would you like to know?";
+    }
+
+    // Cricket-specific advice
+    if (lowerMsg.includes('cricket')) {
+        const tips = [
+            "For cricket, focus on your batting stance - keep your head still and eyes level. Practice your timing in the nets regularly!",
+            "Cricket bowling requires consistent rhythm. Work on your run-up, maintain a smooth action, and focus on line and length.",
+            "Fielding is crucial in cricket. Practice catching drills daily and work on your throwing accuracy from different positions."
+        ];
+        return tips[Math.floor(Math.random() * tips.length)];
+    }
+
+    // Football/Soccer advice
+    if (lowerMsg.includes('football') || lowerMsg.includes('soccer')) {
+        const tips = [
+            "Great question about football! Work on ball control with both feet, practice passing accuracy, and build your cardio endurance.",
+            "For football, first touch is everything. Practice receiving the ball from different angles and heights. Also work on your weak foot!",
+            "Defensive positioning in football requires reading the game. Stay goal-side of your opponent and communicate with teammates."
+        ];
+        return tips[Math.floor(Math.random() * tips.length)];
+    }
+
+    // Basketball advice
+    if (lowerMsg.includes('basketball')) {
+        const tips = [
+            "Basketball skills improve with practice! Focus on dribbling with both hands, shooting form (follow-through is key), and defensive footwork.",
+            "For basketball shooting, remember: BEEF - Balance, Eyes on target, Elbow in, Follow through. Practice this form consistently!",
+            "Basketball defense wins games. Work on lateral quickness drills and practice staying in front of your opponent without reaching."
+        ];
+        return tips[Math.floor(Math.random() * tips.length)];
+    }
+
+    // Tennis advice
+    if (lowerMsg.includes('tennis')) {
+        return "Tennis requires excellent footwork and timing. Practice your split-step, work on consistent serves, and develop variety in your shots (topspin, slice, flat).";
+    }
+
+    // Training questions
+    if (lowerMsg.includes('train') || lowerMsg.includes('workout') || lowerMsg.includes('exercise')) {
+        return "Consistent training is key to improvement! Combine strength training, cardio, flexibility work, and skill-specific drills. Remember to rest and recover properly.";
+    }
+
+    // Nutrition
+    if (lowerMsg.includes('nutrition') || lowerMsg.includes('diet') || lowerMsg.includes('food')) {
+        return "Proper nutrition fuels performance! Focus on lean proteins, complex carbs, healthy fats, and plenty of vegetables. Stay hydrated and time your meals around training.";
+    }
+
+    // Default response
+    return "That's a great question! This is a demo AI coach providing sample responses. For personalized coaching, the full version will analyze your performance data and provide tailored advice.";
+}
 
 /**
  * GET /ai/credits
